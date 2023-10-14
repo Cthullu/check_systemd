@@ -1,5 +1,4 @@
 name: Run ShellCheck
-run-name: ${{ github.actor }} is testing out GitHub Actions
 
 on:
   pull_request:
@@ -10,8 +9,11 @@ on:
 jobs:
   shellcheck:
     name: ShellCheck
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS: -s bash -f gcc -o all -e SC2249

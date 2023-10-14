@@ -1,5 +1,7 @@
 # Check Systemd Timer
 
+![ShellShock Workflow](https://github.com/cthullu/systemd_timer_check/actions/workflows/shellcheck.yml/badge.svg?branch=main)
+
 A simple bash script which uses systemd capabilities to check if a given systemd
 timer is active and has been executed in a given timeframe.
 
