@@ -121,4 +121,20 @@ if [[ $? -ne 0 ]]; then
     exit 2
 fi
 
-exit 0
+#
+# If no timeframe was specified, check if the systemd timer is avtivated
+#
+if [[ -z ${TIMEFRAME} ]]; then
+    systemctl is-active ${SYSTEMD_TIMER} &> /dev/null
+
+    if [[ $? -ne 0 ]]; then
+        echo "Error: Timer is not running."
+        exit 1
+    else
+        echo "Timer ${SYSTEMD_TIMER} is running."
+        exit 0
+    fi
+
+fi
+
+exit 42
