@@ -1,10 +1,9 @@
----
 name: Run ShellCheck
 run-name: ${{ github.actor }} is testing out GitHub Actions
 
-on: [push]
-  # pull_request:
-  #   branches: [ "main" ]
+on:
+  pull_request:
+    branches: [ "main" ]
 
   workflow_dispatch:
 
