@@ -129,9 +129,7 @@ fi
 # Check if provided systemd timer exists
 #
 
-systemctl list-timers ${SYSTEMD_TIMER} | grep ${SYSTEMD_TIMER} &> /dev/null
-
-if [[ $? -ne 0 ]]; then
+if ! systemctl list-timers "${SYSTEMD_TIMER}" | grep "${SYSTEMD_TIMER}" &> /dev/null; then
 
     echo "Error: Timer ${SYSTEMD_TIMER} not found at system."
     exit 2
@@ -142,9 +140,7 @@ fi
 # Check if systemd timer is active
 #
 
-systemctl is-active ${SYSTEMD_TIMER} &> /dev/null
-
-if [[ $? -ne 0 ]]; then
+if ! systemctl is-active "${SYSTEMD_TIMER}" &> /dev/null; then
 
     echo "Error: Timer is not active."
     exit 1
@@ -156,12 +152,12 @@ fi
 # timeframe value
 #
 
-if ! [[ -z ${TIMEFRAME} ]]; then
+if [[ -n ${TIMEFRAME} ]]; then
 
-    LAST_EXECUTION=$(systemctl show ${SYSTEMD_TIMER} --property LastTriggerUSec --value)
+    LAST_EXECUTION=$(systemctl show "${SYSTEMD_TIMER}" --property LastTriggerUSec --value)
     LAST_EXECUTION_SEC=$(date --date "${LAST_EXECUTION}" +'%s')
 
-    NEXT_EXECUTION=$(systemctl show ${SYSTEMD_TIMER} --property NextElapseUSecRealtime --value)
+    NEXT_EXECUTION=$(systemctl show "${SYSTEMD_TIMER}" --property NextElapseUSecRealtime --value)
     NEXT_EXECUTION_SEC=$(date --date "${NEXT_EXECUTION}" +'%s')
 
     MAX_LAST_EXECUTION_SEC=$(date --date "${TIMEFRAME} minutes ago" +'%s')
