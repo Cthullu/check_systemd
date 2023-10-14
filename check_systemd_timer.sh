@@ -124,6 +124,7 @@ fi
 #
 # If no timeframe was specified, check if the systemd timer is avtivated
 #
+
 if [[ -z ${TIMEFRAME} ]]; then
     systemctl is-active ${SYSTEMD_TIMER} &> /dev/null
 
@@ -136,5 +137,10 @@ if [[ -z ${TIMEFRAME} ]]; then
     fi
 
 fi
+
+#
+# If we ever end here, something went terribly wrong, so exit with something
+# unique.
+#
 
 exit 42
