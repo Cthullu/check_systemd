@@ -16,6 +16,11 @@
 VERSION="0.1.0"
 
 #
+# History:
+# * 2023-10-14: Version 0.1.0
+#
+
+#
 # Function to print tool usage
 #
 
@@ -45,7 +50,7 @@ Help()
 
     echo "Options:"
     echo "-h    Print this help message."
-    echo "-t    Timeframe in minutes since the unit should have last run."
+    echo "-t    Timeframe in minutes within the unit should run."
     echo "-u    Name of the systemd timer unit to be checked."
     echo "-v    Print the script version."
     echo
