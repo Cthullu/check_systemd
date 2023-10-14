@@ -16,10 +16,4 @@ jobs:
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
         env:
-          SHELLCHECK_OPTS: -s bash -f gcc -o all check_systemd_timer.sh
-
-      - name: Run ShellCheck Container
-        uses: sudo-bot/action-shellcheck@latest
-        with:
-            # https://github.com/koalaman/shellcheck#how-to-use
-            cli-args: "-s bash -f gcc -o all check_systemd_timer.sh"
+          SHELLCHECK_OPTS: -s bash -f gcc -o all
