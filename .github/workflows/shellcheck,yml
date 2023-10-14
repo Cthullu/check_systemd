@@ -1,0 +1,17 @@
+---
+name: Run ShellCheck
+run-name: ${{ github.actor }} is testing out GitHub Actions
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-lastest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
