@@ -69,22 +69,30 @@ while getopts ":ht:u:v" option; do
         t)
             TIMEFRAME=${OPTARG}
             re_isanum='^[0-9]+$'
+
             if ! [[ ${TIMEFRAME} =~ ${re_isanum} ]]; then
+
                 echo "Error: Timeframe must be a positive integer."
                 Usage
                 exit 1
+
             fi
+
             ;;
         u)
             SYSTEMD_TIMER="${OPTARG}"
+
             if ! [[ ${SYSTEMD_TIMER} == *.timer ]]; then
+
                 echo "Error: Specified unit must be a timer."
                 Usage
                 exit 1
+
             fi
+
             ;;
         v)  # Print the version
-            echo "Version: ${VERSION}"
+            echo "${VERSION}"
             exit 0
             ;;
         :)
@@ -105,9 +113,11 @@ done
 #
 
 if [[ -z ${SYSTEMD_TIMER} ]]; then
+
     echo "Error: A unit name must be specified."
     Usage
     exit 1
+
 fi
 
 #
@@ -117,30 +127,57 @@ fi
 systemctl list-timers ${SYSTEMD_TIMER} | grep ${SYSTEMD_TIMER} &> /dev/null
 
 if [[ $? -ne 0 ]]; then
+
     echo "Error: Timer ${SYSTEMD_TIMER} not found at system."
     exit 2
+
 fi
 
 #
-# If no timeframe was specified, check if the systemd timer is avtivated
+# Check if systemd timer is active
 #
 
-if [[ -z ${TIMEFRAME} ]]; then
-    systemctl is-active ${SYSTEMD_TIMER} &> /dev/null
+systemctl is-active ${SYSTEMD_TIMER} &> /dev/null
 
-    if [[ $? -ne 0 ]]; then
-        echo "Error: Timer is not running."
-        exit 1
-    else
-        echo "Timer ${SYSTEMD_TIMER} is running."
-        exit 0
+if [[ $? -ne 0 ]]; then
+
+    echo "Error: Timer is not active."
+    exit 1
+
+fi
+
+#
+# If a timestamp was specified, we need to compare it with the provided
+# timeframe value
+#
+
+if ! [[ -z ${TIMEFRAME} ]]; then
+
+    LAST_EXECUTION=$(systemctl show ${SYSTEMD_TIMER} --property LastTriggerUSec --value)
+    LAST_EXECUTION_SEC=$(date --date "${LAST_EXECUTION}" +'%s')
+
+    NEXT_EXECUTION=$(systemctl show ${SYSTEMD_TIMER} --property NextElapseUSecRealtime --value)
+    NEXT_EXECUTION_SEC=$(date --date "${NEXT_EXECUTION}" +'%s')
+
+    MAX_LAST_EXECUTION_SEC=$(date --date "${TIMEFRAME} minutes ago" +'%s')
+    MAX_NEXT_EXECUTION_SEC=$(date --date "${TIMEFRAME} minutes" +'%s')
+
+    #
+    # Compare our timestamps
+    #
+
+    if [[ ${LAST_EXECUTION_SEC} -lt ${MAX_LAST_EXECUTION_SEC} ]] && [[ ${NEXT_EXECUTION_SEC} -gt ${MAX_NEXT_EXECUTION_SEC} ]]; then
+
+        echo "${SYSTEMD_TIMER} will not run in specified timeframe -- Critical"
+        exit 2
+
     fi
 
 fi
 
 #
-# If we ever end here, something went terribly wrong, so exit with something
-# unique.
+# If we ever end here, something went terribly wrong, so exit with code 0
 #
 
-exit 42
+echo "Checked ${SYSTEMD_TIMER} -- OK"
+exit 0
