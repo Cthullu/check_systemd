@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+ set -o pipefail
 
 #
 # This is a lightweight bash script to be used with Nagios/Icinga using only
@@ -10,7 +10,7 @@ set -euo pipefail
 #
 # Author: Daniel Kuß
 # License: MIT
-# Source: https://github.com/Cthullu/icinga_timer_check
+# Source: https://github.com/Cthullu/systemd_timer_check
 #
 
 VERSION="0.1.0"
@@ -22,7 +22,7 @@ VERSION="0.1.0"
 Usage()
 {
     echo
-    echo "Usage: ${0} [-h|v] [-t <int>] [-u <string>.timer]" 1>&2
+    echo "Usage: ${0} [-h|v] [-t <int>] -u <string>.timer" 1>&2
     echo
 }
 
@@ -34,7 +34,7 @@ Help()
 {
     # Display the help message
     echo "Systemd Timer check script."
-    echo 
+    echo
     echo "This script can be used to get the current state of a systemd timer."
     echo "If only the timer name is provided, the script will check if the"
     echo "timer is active."
@@ -66,7 +66,7 @@ while getopts ":ht:u:v" option; do
             Help
             exit 0
             ;;
-        t)  
+        t)
             TIMEFRAME=${OPTARG}
             re_isanum='^[0-9]+$'
             if ! [[ ${TIMEFRAME} =~ ${re_isanum} ]]; then
@@ -75,7 +75,7 @@ while getopts ":ht:u:v" option; do
                 exit 1
             fi
             ;;
-        u)  
+        u)
             SYSTEMD_TIMER="${OPTARG}"
             if ! [[ ${SYSTEMD_TIMER} == *.timer ]]; then
                 echo "Error: Specified unit must be a timer."
@@ -93,7 +93,7 @@ while getopts ":ht:u:v" option; do
             exit 1
             ;;
         \?) # Catch invalid options
-            echo "Error: Invalid option"
+            echo "Error: Invalid option."
             Usage
             exit 1
             ;;
@@ -101,9 +101,24 @@ while getopts ":ht:u:v" option; do
 done
 
 #
+# Check if the systemd timer unit was defined
+#
+
+if [[ -z ${SYSTEMD_TIMER} ]]; then
+    echo "Error: A unit name must be specified."
+    Usage
+    exit 1
+fi
+
+#
 # Check if provided systemd timer exists
 #
 
-echo "systemctl list-timers ${SYSTEMD_TIMER}"
+systemctl list-timers ${SYSTEMD_TIMER} | grep ${SYSTEMD_TIMER} &> /dev/null
+
+if [[ $? -ne 0 ]]; then
+    echo "Error: Timer ${SYSTEMD_TIMER} not found at system."
+    exit 2
+fi
 
 exit 0
