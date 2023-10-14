@@ -4,8 +4,9 @@ run-name: ${{ github.actor }} is testing out GitHub Actions
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
+
+  workflow_dispatch:
 
 jobs:
   shellcheck:
