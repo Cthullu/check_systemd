@@ -22,7 +22,7 @@ VERSION="0.1.0"
 Usage()
 {
     echo
-    echo "Usage: ${0} [-h|v] [-t <int>] [-u <string>]" 1>&2
+    echo "Usage: ${0} [-h|v] [-t <int>] [-u <string>.timer]" 1>&2
     echo
 }
 
@@ -72,10 +72,16 @@ while getopts ":ht:u:v" option; do
             if ! [[ ${TIMEFRAME} =~ ${re_isanum} ]]; then
                 echo "Error: Timeframe must be a positive integer."
                 Usage
+                exit 1
             fi
             ;;
         u)  
             SYSTEMD_TIMER="${OPTARG}"
+            if ! [[ ${SYSTEMD_TIMER} == *.timer ]]; then
+                echo "Error: Specified unit must be a timer."
+                Usage
+                exit 1
+            fi
             ;;
         v)  # Print the version
             echo "Version: ${VERSION}"
@@ -84,6 +90,7 @@ while getopts ":ht:u:v" option; do
         :)
             echo "Error: -${OPTARG} requires an argument."
             Usage
+            exit 1
             ;;
         \?) # Catch invalid options
             echo "Error: Invalid option"
@@ -92,5 +99,11 @@ while getopts ":ht:u:v" option; do
             ;;
     esac
 done
+
+#
+# Check if provided systemd timer exists
+#
+
+echo "systemctl list-timers ${SYSTEMD_TIMER}"
 
 exit 0
