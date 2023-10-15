@@ -1,4 +1,4 @@
-name: Run ShellCheck
+name: Check Timer Script
 
 on:
   pull_request:
