@@ -105,7 +105,7 @@ while getopts ":hu:v" option; do
 
                 echo "Error: Specified unit must be a service."
                 usage
-                exit 1
+                exit 3
 
             fi
 
@@ -119,17 +119,17 @@ while getopts ":hu:v" option; do
         :)  # In case argument is missing
             echo "Error: -${OPTARG} requires an argument."
             usage
-            exit 1
+            exit 3
             ;;
 
         \?) # Catch invalid options
             echo "Error: Invalid option."
             usage
-            exit 1
+            exit 3
             ;;
 
         *)  # We should never get here, so simply exit
-            return 2
+            return 3
             ;;
     esac
 done
@@ -142,7 +142,7 @@ if [[ -z ${SYSTEMD_UNIT} ]]; then
 
     echo "Error: A unit name must be specified."
     usage
-    exit 1
+    exit 3
 
 fi
 
@@ -152,7 +152,7 @@ fi
 
 if ! service_exists "${SYSTEMD_UNIT}" &> /dev/null; then
 
-    echo "Error: Service ${SYSTEMD_UNIT} not found at system."
+    echo "Critical: Service ${SYSTEMD_UNIT} not found at system."
     exit 2
 
 fi
@@ -163,8 +163,8 @@ fi
 
 if ! service_active "${SYSTEMD_UNIT}" &> /dev/null; then
 
-  echo "Warning: Service ${SYSTEMD_UNIT} is not running."
-  exit 1
+  echo "Critical: Service ${SYSTEMD_UNIT} is not running."
+  exit 2
 
 fi
 
