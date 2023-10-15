@@ -57,7 +57,7 @@ help() {
 service_exists() {
   local SERVICE="${1}"
 
-  if [[ $(systemctl list-units --all --type service --full --no-legend "${SERVICE}") ]]; then
+  if [[ -n $(systemctl list-units --all --type service --full --no-legend "${SERVICE}" || true) ]]; then
     return 0
   else
     return 1
