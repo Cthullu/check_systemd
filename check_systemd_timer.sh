@@ -13,7 +13,7 @@
 # Source: https://github.com/Cthullu/systemd_timer_check
 #
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 
 #
 # History:
@@ -24,8 +24,7 @@ VERSION="0.1.0"
 # Function to print tool usage
 #
 
-Usage()
-{
+usage() {
     echo
     echo "Usage: ${0} [-h|v] [-t <int>] -u <string>.timer" 1>&2
     echo
@@ -35,8 +34,7 @@ Usage()
 # Function to print help message
 #
 
-Help()
-{
+help() {
     # Display the help message
     echo "Systemd Timer check script."
     echo
@@ -46,7 +44,7 @@ Help()
     echo "If in addition a time-window is provided, the script will check if"
     echo "the timer had run within given window."
 
-    Usage
+    usage
 
     echo "Options:"
     echo "-h    Print this help message."
@@ -54,6 +52,32 @@ Help()
     echo "-u    Name of the systemd timer unit to be checked."
     echo "-v    Print the script version."
     echo
+}
+
+#
+# Little helpers
+#
+
+timer_exists() {
+    local TIMER="${1}"
+
+    if systemctl list-timers "${TIMER}" | grep "${TIMER}"; then
+        return 0
+    else
+        return 1
+    fi
+
+}
+
+timer_active() {
+    local TIMER="${1}"
+
+  if systemctl is-active "${TIMER}"; then
+    return 0
+  else
+    return 1
+  fi
+
 }
 
 #
@@ -68,47 +92,56 @@ Help()
 while getopts ":ht:u:v" option; do
     case ${option} in
         h)  # Print the help message
-            Help
+            help
             exit 0
             ;;
-        t)
+
+        t)  # Save the provided timeframe
             TIMEFRAME=${OPTARG}
             re_isanum='^[0-9]+$'
 
             if ! [[ ${TIMEFRAME} =~ ${re_isanum} ]]; then
 
                 echo "Error: Timeframe must be a positive integer."
-                Usage
+                usage
                 exit 1
 
             fi
 
             ;;
-        u)
+
+        u)  # Save the provided timer name
             SYSTEMD_TIMER="${OPTARG}"
 
             if ! [[ ${SYSTEMD_TIMER} == *.timer ]]; then
 
                 echo "Error: Specified unit must be a timer."
-                Usage
+                usage
                 exit 1
 
             fi
 
             ;;
+
         v)  # Print the version
             echo "${VERSION}"
             exit 0
             ;;
+
         :)
             echo "Error: -${OPTARG} requires an argument."
-            Usage
+            usage
             exit 1
             ;;
+
         \?) # Catch invalid options
             echo "Error: Invalid option."
-            Usage
+            usage
             exit 1
+            ;;
+
+        *)  # We should never get here, so simply exit
+            return 2
             ;;
     esac
 done
@@ -120,7 +153,7 @@ done
 if [[ -z ${SYSTEMD_TIMER} ]]; then
 
     echo "Error: A unit name must be specified."
-    Usage
+    usage
     exit 1
 
 fi
@@ -129,7 +162,7 @@ fi
 # Check if provided systemd timer exists
 #
 
-if ! systemctl list-timers "${SYSTEMD_TIMER}" | grep "${SYSTEMD_TIMER}" &> /dev/null; then
+if ! timer_exists "${SYSTEMD_TIMER}" &> /dev/null; then
 
     echo "Error: Timer ${SYSTEMD_TIMER} not found at system."
     exit 2
@@ -140,9 +173,9 @@ fi
 # Check if systemd timer is active
 #
 
-if ! systemctl is-active "${SYSTEMD_TIMER}" &> /dev/null; then
+if ! timer_active "${SYSTEMD_TIMER}" &> /dev/null; then
 
-    echo "Error: Timer is not active."
+    echo "Warning: Timer is not active."
     exit 1
 
 fi
@@ -169,15 +202,15 @@ if [[ -n ${TIMEFRAME} ]]; then
 
     if [[ ${LAST_EXECUTION_SEC} -lt ${MAX_LAST_EXECUTION_SEC} ]] && [[ ${NEXT_EXECUTION_SEC} -gt ${MAX_NEXT_EXECUTION_SEC} ]]; then
 
-        echo "${SYSTEMD_TIMER} will not run in specified timeframe -- Critical"
-        exit 2
+        echo "Warning: ${SYSTEMD_TIMER} will not run in specified timeframe "
+        exit 1
 
     fi
 
 fi
 
 #
-# If we ever end here, something went terribly wrong, so exit with code 0
+# If we end here, everything is fine
 #
 
 echo "Checked ${SYSTEMD_TIMER} -- OK"

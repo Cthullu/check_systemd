@@ -1,19 +1,25 @@
-name: Run ShellCheck
+name: Check Service Script
 
 on:
   pull_request:
+    branches: [ "main" ]
+
+  push:
     branches: [ "main" ]
 
   workflow_dispatch:
 
 jobs:
   shellcheck:
-    name: ShellCheck
+    name: ShellCheck Service Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
+        with:
+          ignore_names: >-
+            check_systemd_timer.sh
         env:
-          SHELLCHECK_OPTS: -s bash -f gcc -o all -e SC2249
+          SHELLCHECK_OPTS: -s bash -f gcc -o all
