@@ -20,6 +20,6 @@ jobs:
         uses: ludeeus/action-shellcheck@master
         with:
           ignore_names: >-
-            systemd_timer.yml
+            check_systemd_timer.sh
         env:
           SHELLCHECK_OPTS: -s bash -f gcc -o all
