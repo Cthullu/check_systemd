@@ -28,15 +28,18 @@ Script to check if a specified service
 -v    Print the script version.
 ~~~
 
-### Retun Codes
+### Service Check Retun Codes
 
-The script returns RC 0 if the specified service is active and enabled.
+* RC0 if the specified service runs and is enabled
+* RC0 if help is printed
+* RC0 if version is printed
+* RC1 if the specified service runs but is not enables
+* RC2 if the specified service was not found
+* RC2 if the specified service does not run
+* RC3 if no service was defined
+* RC3 if an invalid option was defined
 
-If the service is not enabled or active, RC 1 is returned.
-
-If the service is not known at the system, RC 2 is returned.
-
-## check_systemd_service.sh
+## check_systemd_timer.sh
 
 A simple bash script which uses systemd capabilities to check if a given systemd
 timer is active and has been executed in a given timeframe.
@@ -61,15 +64,17 @@ Script to check if a specified service
 -v    Print the script version.
 ~~~
 
-### Retun Codes
+### Timer Check Retun Codes
 
-The script returns RC 0 if the specified timer is active and runs within the
-specified timeframe.
-
-If the timer is not active or does not run within the timeframe, RC 1 is
-returned.
-
-If the timer is not known at the system, RC 2 is returned.
+* RC0 if help is printed
+* RC0 if version is printed
+* RC0 if the specified timer is active and did run within the defined timeframe
+* RC1 if the specified timer did not run within defined timeframe
+* RC2 if the specified timer was not found
+* RC2 if the specified timer was not found
+* RC3 if an invalid timeframe was defined
+* RC3 if no timer was specified
+* RC3 if an invalid option was defined
 
 ## License
 
@@ -81,3 +86,4 @@ MIT
 |-------------|---------|-------------|
 | 2023-10-14  | 0.1.0   | Daniel Kuß  |
 | 2023-10-15  | 1.0.0   | Daniel Kuß  |
+| 2023-10-15  | 1.0.1   | Daniel Kuß  |

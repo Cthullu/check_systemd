@@ -13,7 +13,7 @@
 # Source: https://github.com/Cthullu/systemd_timer_check
 #
 
-VERSION="0.1.1"
+VERSION="1.0.1"
 
 #
 # History:
@@ -104,7 +104,7 @@ while getopts ":ht:u:v" option; do
 
                 echo "Error: Timeframe must be a positive integer."
                 usage
-                exit 1
+                exit 3
 
             fi
 
@@ -117,7 +117,7 @@ while getopts ":ht:u:v" option; do
 
                 echo "Error: Specified unit must be a timer."
                 usage
-                exit 1
+                exit 3
 
             fi
 
@@ -131,17 +131,17 @@ while getopts ":ht:u:v" option; do
         :)
             echo "Error: -${OPTARG} requires an argument."
             usage
-            exit 1
+            exit 3
             ;;
 
         \?) # Catch invalid options
             echo "Error: Invalid option."
             usage
-            exit 1
+            exit 3
             ;;
 
         *)  # We should never get here, so simply exit
-            return 2
+            return 3
             ;;
     esac
 done
@@ -154,7 +154,7 @@ if [[ -z ${SYSTEMD_TIMER} ]]; then
 
     echo "Error: A unit name must be specified."
     usage
-    exit 1
+    exit 3
 
 fi
 
@@ -164,7 +164,7 @@ fi
 
 if ! timer_exists "${SYSTEMD_TIMER}" &> /dev/null; then
 
-    echo "Error: Timer ${SYSTEMD_TIMER} not found at system."
+    echo "Critical: Timer ${SYSTEMD_TIMER} not found at system."
     exit 2
 
 fi
@@ -175,8 +175,8 @@ fi
 
 if ! timer_active "${SYSTEMD_TIMER}" &> /dev/null; then
 
-    echo "Warning: Timer is not active."
-    exit 1
+    echo "Critical: Timer is not active."
+    exit 2
 
 fi
 
