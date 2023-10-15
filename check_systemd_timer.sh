@@ -13,7 +13,7 @@
 # Source: https://github.com/Cthullu/systemd_timer_check
 #
 
-VERSION="0.1.1"
+VERSION="1.0.1"
 
 #
 # History:
