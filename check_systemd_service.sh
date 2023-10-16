@@ -13,13 +13,14 @@
 # Source: https://github.com/Cthullu/check_systemd
 #
 
-VERSION="1.0.1"
+VERSION="1.0.2"
 
 #
 # History:
 # * 2023-10-15: Version 0.1.0
 # * 2023-10-15: Version 1.0.0
 # * 2023-10-15: Version 1.0.1
+# * 2023-10-16: Version 1.0.2
 #
 
 #
