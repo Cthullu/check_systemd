@@ -174,7 +174,7 @@ fi
 # Check if service is enabled
 #
 
-if ! service_enabled "${SYSTEMD_UNIT}"; then
+if ! service_enabled "${SYSTEMD_UNIT}" &> /dev/null; then
 
   echo: "Warning: Service ${SYSTEMD_UNIT} is not enabled."
   exit 1
