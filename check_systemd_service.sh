@@ -13,11 +13,14 @@
 # Source: https://github.com/Cthullu/check_systemd
 #
 
-VERSION="1.0.1"
+VERSION="1.0.2"
 
 #
 # History:
 # * 2023-10-15: Version 0.1.0
+# * 2023-10-15: Version 1.0.0
+# * 2023-10-15: Version 1.0.1
+# * 2023-10-16: Version 1.0.2
 #
 
 #
@@ -172,9 +175,9 @@ fi
 # Check if service is enabled
 #
 
-if ! service_enabled "${SYSTEMD_UNIT}"; then
+if ! service_enabled "${SYSTEMD_UNIT}" &> /dev/null; then
 
-  echo: "Warning: Service ${SYSTEMD_UNIT} is not enabled."
+  echo "Warning: Service ${SYSTEMD_UNIT} is running but not enabled."
   exit 1
 
 fi
