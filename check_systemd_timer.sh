@@ -21,6 +21,7 @@ VERSION="1.0.2"
 # * 2023-10-15: Version 1.0.0
 # * 2023-10-15: Version 1.0.1
 # * 2023-10-16: version 1.0.2
+# * 2023-10-24: Version 1.0.3
 #
 
 #
@@ -29,7 +30,7 @@ VERSION="1.0.2"
 
 usage() {
     echo
-    echo "Usage: ${0} [-h|v] [-t <int>] -u <string>.timer" 1>&2
+    echo "Usage: $(basename "${0}") [-h|v] [-t <int>] -u <string>.timer" 1>&2
     echo
 }
 
@@ -131,20 +132,17 @@ while getopts ":ht:u:v" option; do
             exit 0
             ;;
 
-        :)
+        :)  # In case argument is missing
             echo "Error: -${OPTARG} requires an argument."
             usage
             exit 3
             ;;
 
-        \?) # Catch invalid options
+        *)  # Catch invalid options. We should never get here, so simply print
+            # the usage and exit
             echo "Error: Invalid option."
             usage
             exit 3
-            ;;
-
-        *)  # We should never get here, so simply exit
-            return 3
             ;;
     esac
 done

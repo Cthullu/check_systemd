@@ -13,7 +13,7 @@
 # Source: https://github.com/Cthullu/check_systemd
 #
 
-VERSION="1.0.2"
+VERSION="1.0.3"
 
 #
 # History:
@@ -21,6 +21,7 @@ VERSION="1.0.2"
 # * 2023-10-15: Version 1.0.0
 # * 2023-10-15: Version 1.0.1
 # * 2023-10-16: Version 1.0.2
+# * 2023-10-24: Version 1.0.3
 #
 
 #
@@ -29,7 +30,7 @@ VERSION="1.0.2"
 
 usage() {
     echo
-    echo "Usage: ${0} [-h|v] -u <string>.service" 1>&2
+    echo "Usage: $(basename "${0}") [-h|v] -u <string>.service" 1>&2
     echo
 }
 
@@ -125,14 +126,11 @@ while getopts ":hu:v" option; do
             exit 3
             ;;
 
-        \?) # Catch invalid options
+        *)  # Catch invalid options. We should never get here, so simply print
+            # the usage and exit
             echo "Error: Invalid option."
             usage
             exit 3
-            ;;
-
-        *)  # We should never get here, so simply exit
-            return 3
             ;;
     esac
 done
