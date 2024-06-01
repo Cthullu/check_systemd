@@ -98,7 +98,7 @@ def check_runtime_window(timer: str, time_window: int, logger: logging = None) -
 
     next_execution = next_execution.stdout.split("=")[1].strip()
 
-    logger.debug("Convert next execution timestamp %s to seconds.", last_execution)
+    logger.debug("Convert next execution timestamp %s to seconds.", next_execution)
     next_execution_sec = subprocess.run(
         ["date", "--date", f"{next_execution}", "+%s"],
         check = False,
@@ -124,8 +124,12 @@ def check_runtime_window(timer: str, time_window: int, logger: logging = None) -
     )
 
     logger.debug("Compare timestamps.")
-    if (last_execution_sec < int(max_last_execution_sec.stdout)) and (next_execution_sec > int(max_next_execution_sec.stdout)):
+    if ((last_execution_sec < int(max_last_execution_sec.stdout)) and
+        (next_execution_sec > int(max_next_execution_sec.stdout))):
         logger.debug("Timer %s will not run in specified timeframe.", timer)
-        return 1
+        ret_val = 1
+    else:
+        logger.debug("Timer %s will run in specified timeframe.", timer)
+        ret_val = 0
 
-    return 0
+    return ret_val
