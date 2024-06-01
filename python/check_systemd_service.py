@@ -15,11 +15,11 @@ def main():
     """
     Main function.
 
-    :return:
-        0 if the specified service runs and is enabled
-        1 if the specified service runs but is not enables
-        2 if the specified service was not found
-        2 if the specified service does not run
+    :return: int
+        0: if the specified service runs and is enabled
+        1: if the specified service runs but is not enables
+        2: if the specified service was not found
+        2: if the specified service does not run
     """
 
     logging.basicConfig(

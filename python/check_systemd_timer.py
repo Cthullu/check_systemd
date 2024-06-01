@@ -17,11 +17,11 @@ def main():
     """
     Main function.
 
-    :return:
-        0 if the specified timer is active and did run within the defined timeframe
-        1 if the specified timer is not active
-        1 if the specified timer did not run within defined timeframe
-        2 if the specified timer was not found
+    :return: int
+        0: if the specified timer is active and did run within the defined timeframe
+        1: if the specified timer is not active
+        1: if the specified timer did not run within defined timeframe
+        2: if the specified timer was not found
     """
 
     logging.basicConfig(

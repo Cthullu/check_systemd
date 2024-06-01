@@ -16,10 +16,10 @@ def check_timer_status(timer: str, logger: logging = None) -> int:
     :param service: str
     :param logger: logging
 
-    :return:
-        0 if the specified timer is active
-        1 if the specified timer is not active
-        2 if the specified timer was not found
+    :return: int
+        0: if the specified timer is active
+        1: if the specified timer is not active
+        2: if the specified timer was not found
     """
 
     logger = logger if logger else logging.getLogger()
@@ -58,9 +58,9 @@ def check_runtime_window(timer: str, time_window: int, logger: logging = None) -
     :param time_window: int
     :param logger: logging
 
-    :return:
-        0 if the specified timer ran within the given time window
-        1 if the specified timer did not run within the given time window
+    :return: int
+        0: if the specified timer ran within the given time window
+        1: if the specified timer did not run within the given time window
     """
 
     logger = logger if logger else logging.getLogger()
