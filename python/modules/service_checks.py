@@ -15,6 +15,7 @@ def check_service_exists(service: str, logger: logging = None) -> int:
 
     :param service: str
     :param logger: logging
+
     :return:
         0 if the specified service runs and is enabled
         1 if the specified service runs but is not enables
