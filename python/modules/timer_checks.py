@@ -50,6 +50,7 @@ def check_timer_status(timer: str, logger: logging = None) -> int:
 
     return 0
 
+
 def check_runtime_window(timer: str, time_window: int, logger: logging = None) -> int:
     """
     Check if a systemd timer has run within a given time window.
