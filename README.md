@@ -1,6 +1,7 @@
 # Check Systemd
 
-![Service Workflow](https://github.com/cthullu/systemd_timer_check/actions/workflows/systemd_service.yml/badge.svg?branch=main) ![Timer Workflow](https://github.com/cthullu/systemd_timer_check/actions/workflows/systemd_timer.yml/badge.svg?branch=main)
+![Service Workflow](https://github.com/cthullu/systemd_timer_check/actions/workflows/systemd_service.yml/badge.svg?branch=main)
+![Timer Workflow](https://github.com/cthullu/systemd_timer_check/actions/workflows/systemd_timer.yml/badge.svg?branch=main)
 
 A toolsuite to check systemd services and timer written in bash.
 
