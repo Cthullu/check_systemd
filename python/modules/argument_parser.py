@@ -19,7 +19,6 @@ def get_service_parser(version: str) -> argparse.ArgumentParser:
 
     parser.add_argument(
         "-d", "--debug",
-        type = bool,
         dest = "debug",
         help = "turn on debug logging",
         action = "store_true",
@@ -58,7 +57,6 @@ def get_timer_parser(version: str) -> argparse.ArgumentParser:
 
     parser.add_argument(
         "-d", "--debug",
-        type = bool,
         dest = "debug",
         help = "turn on debug logging",
         action = "store_true",
@@ -79,7 +77,7 @@ def get_timer_parser(version: str) -> argparse.ArgumentParser:
         type = int,
         dest = "time_window",
         metavar = "<window>",
-        help = "the time window in seconds in which the timer should have run",
+        help = "the time window in minutes in which the timer should have run",
         required = False,
     )
 
