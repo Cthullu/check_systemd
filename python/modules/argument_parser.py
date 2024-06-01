@@ -6,6 +6,36 @@ Argument parsers for the check_systemd_service.py and check_systemd_timer.py scr
 
 import argparse
 
+def get_parser(version: str) -> argparse.ArgumentParser:
+    """
+    Returns an ArgumentParser for the check_systemd.py script.
+
+    :return: ArgumentParser
+    """
+    parser = argparse.ArgumentParser(
+        prog = "check_systemd",
+        description="Checksystemd service and timer units.",
+    )
+
+    parser.add_argument(
+        "-d", "--debug",
+        dest = "debug",
+        help = "turn on debug logging",
+        action = "store_true",
+        default = False,
+    )
+
+    parser.add_argument(
+        "-v", "--version",
+        action = "version",
+        version = f'%(prog)s {version}'
+    )
+
+    # TODO: Add subparsers for service and timer specific arguments
+
+    return parser
+
+
 def get_service_parser(version: str) -> argparse.ArgumentParser:
     """
     Returns an ArgumentParser for the check_systemd_service.py script.
