@@ -31,32 +31,20 @@ def get_parser(version: str) -> argparse.ArgumentParser:
         version = f'%(prog)s {version}'
     )
 
-    # TODO: Add subparsers for service and timer specific arguments
-
-    return parser
-
-
-def get_service_parser(version: str) -> argparse.ArgumentParser:
-    """
-    Returns an ArgumentParser for the check_systemd_service.py script.
-
-    :return: ArgumentParser
-    """
-    parser = argparse.ArgumentParser(
-        prog = "check_systemd_service",
-        description="Check if a systemd service is running and enabled.",
+    subparsers = parser.add_subparsers(
+        title = "subcommands",
+        description = "valid subcommands",
+        help = "additional help",
+        dest = "subcommand",
     )
 
-    parser.add_argument(
-        "-d", "--debug",
-        dest = "debug",
-        help = "turn on debug logging",
-        action = "store_true",
-        default = False,
+    service_group = subparsers.add_parser(
+        name = "service",
+        help = "systemd service related checks",
     )
 
-    parser.add_argument(
-       "-s", "--service",
+    service_group.add_argument(
+        '-s', '--service',
         type = str,
         dest = "service",
         metavar = "<service>",
@@ -64,37 +52,13 @@ def get_service_parser(version: str) -> argparse.ArgumentParser:
         required = True,
     )
 
-    parser.add_argument(
-        "-v", "--version",
-        action = "version",
-        version = f'%(prog)s {version}'
+    timer_group = subparsers.add_parser(
+        name = "timer",
+        help = "systemd timer related checks",
     )
 
-    return parser
-
-
-def get_timer_parser(version: str) -> argparse.ArgumentParser:
-    """
-    Returns an ArgumentParser for the check_systemd_timer.py script.
-
-    :return: ArgumentParser
-    """
-    parser = argparse.ArgumentParser(
-        prog = "check_systemd_timer",
-        description="Check if a systemd timer is active and optionally if it ran within a given "
-            "time window.",
-    )
-
-    parser.add_argument(
-        "-d", "--debug",
-        dest = "debug",
-        help = "turn on debug logging",
-        action = "store_true",
-        default = False,
-    )
-
-    parser.add_argument(
-        "-t", "--timer",
+    timer_group.add_argument(
+        '-t', '--timer',
         type = str,
         dest = "timer",
         metavar = "<timer>",
@@ -102,19 +66,13 @@ def get_timer_parser(version: str) -> argparse.ArgumentParser:
         required = True,
     )
 
-    parser.add_argument(
-        "-w", "--window",
+    timer_group.add_argument(
+        '-w', '--window',
         type = int,
         dest = "time_window",
         metavar = "<window>",
         help = "the time window in minutes in which the timer should have run",
         required = False,
-    )
-
-    parser.add_argument(
-        "-v", "--version",
-        action = "version",
-        version = f'%(prog)s {version}'
     )
 
     return parser
