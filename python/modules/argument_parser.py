@@ -6,7 +6,7 @@ Argument parsers for the check_systemd_service.py and check_systemd_timer.py scr
 
 import argparse
 
-def get_service_parser(version):
+def get_service_parser(version) -> argparse.ArgumentParser:
     """
     Returns an ArgumentParser for the check_systemd_service.py script.
 
@@ -38,4 +38,4 @@ def get_service_parser(version):
         version = f'%(prog)s {version}'
     )
 
-    return parser.parse_args()
+    return parser
