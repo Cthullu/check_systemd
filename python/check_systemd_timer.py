@@ -13,6 +13,21 @@ import logging
 import sys
 from modules import argument_parser, timer_checks
 
+def suffix_check(unitname: str, suffix: str) -> bool:
+    """
+    Check if the provided unitname has the specified suffix.
+
+    :param unitname: str
+    :param suffix: str
+
+    :return: bool
+        True: if the unitname has the specified suffix
+        False: if the unitname does not have the specified suffix
+    """
+
+    return unitname.endswith(suffix)
+
+
 def main():
     """
     Main function.
@@ -39,6 +54,10 @@ def main():
         logger.debug("Debug logging enabled.")
     else:
         logging.basicConfig(level=logging.INFO)
+
+    if not suffix_check(cli_args.timer, ".timer"):
+        logger.error("Timer name %s does not have the '.timer' suffix.", cli_args.timer)
+        sys.exit(3)
 
     logger.debug("Checking if systemd timer %s exists and is enabled.", cli_args.timer)
     ret_val_status = timer_checks.check_timer_status(cli_args.timer, logger)

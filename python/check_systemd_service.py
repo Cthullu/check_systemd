@@ -11,6 +11,21 @@ import logging
 import sys
 from modules import argument_parser, service_checks
 
+def suffix_check(unitname: str, suffix: str) -> bool:
+    """
+    Check if the provided unitname has the specified suffix.
+
+    :param unitname: str
+    :param suffix: str
+
+    :return: bool
+        True: if the unitname has the specified suffix
+        False: if the unitname does not have the specified suffix
+    """
+
+    return unitname.endswith(suffix)
+
+
 def main():
     """
     Main function.
@@ -37,6 +52,11 @@ def main():
         logger.debug("Debug logging enabled.")
     else:
         logging.basicConfig(level=logging.INFO)
+
+    logger.debug("Check if the provided service name has the '.service' suffix.")
+    if not suffix_check(cli_args.service, ".service"):
+        logger.error("Service name %s does not have the '.service' suffix.", cli_args.service)
+        sys.exit(3)
 
     logger.debug("Checking if systemd service %s exists, is running and enabled.", cli_args.service)
     ret_val = service_checks.check_service_exists(cli_args.service, logger)
