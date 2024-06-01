@@ -9,13 +9,17 @@ __version__: str = "0.1.0"
 
 import logging
 import sys
-from modules import argument_parser
+from modules import argument_parser, service_checks
 
 def main():
     """
     Main function.
 
-    :return: 0 on success, 1 on failure.
+    :return:
+        0 if the specified service runs and is enabled
+        1 if the specified service runs but is not enables
+        2 if the specified service was not found
+        2 if the specified service does not run
     """
 
     logging.basicConfig(
@@ -34,9 +38,11 @@ def main():
     else:
         logging.basicConfig(level=logging.INFO)
 
-    logger.debug("Checking if systemd service %s is running and enabled.", cli_args.service)
 
-    return 0
+    logger.debug("Checking if systemd service %s exists, is running and enabled.", cli_args.service)
+    ret_val = service_checks.check_service_exists(cli_args.service, logger)
+
+    return ret_val
 
 
 if __name__ == "__main__":
