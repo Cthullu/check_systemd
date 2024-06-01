@@ -38,7 +38,6 @@ def main():
     else:
         logging.basicConfig(level=logging.INFO)
 
-
     logger.debug("Checking if systemd service %s exists, is running and enabled.", cli_args.service)
     ret_val = service_checks.check_service_exists(cli_args.service, logger)
 
