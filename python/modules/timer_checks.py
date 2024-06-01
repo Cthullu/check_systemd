@@ -69,30 +69,63 @@ def check_runtime_window(timer: str, time_window: int, logger: logging = None) -
         timer, time_window)
 
     logger.debug("Get timestamp of last run of systemd timer %s.", timer)
-    # LAST_EXECUTION=$(systemctl show "${SYSTEMD_TIMER}" --property LastTriggerUSec --value)
     last_execution = subprocess.run(
         ["systemctl", "show", timer, "--property", "LastTriggerUSec"],
-        check = False
+        check = False,
+        capture_output = True,
+        encoding = 'utf-8',
     )
 
-    # LAST_EXECUTION_SEC=$(date --date "${LAST_EXECUTION}" +'%s')
+    last_execution = last_execution.stdout.split("=")[1].strip()
 
-    logger.debug("Get timestamo of next run of systemd timer %s.", timer)
-    # NEXT_EXECUTION=$(systemctl show "${SYSTEMD_TIMER}" --property NextElapseUSecRealtime --value)
+    logger.debug("Convert last execution timestamp %s to seconds.", last_execution)
+    last_execution_sec = subprocess.run(
+        ["date", "--date", f"{last_execution}", "+%s"],
+        check = False,
+        capture_output = True,
+        encoding = 'utf-8',
+    )
+
+    last_execution_sec = int(last_execution_sec.stdout.strip())
+
+    logger.debug("Get timestamp of next run of systemd timer %s.", timer)
     next_execution = subprocess.run(
         ["systemctl", "show", timer, "--property", "NextElapseUSecRealtime"],
         check = False,
+        capture_output = True,
+        encoding = 'utf-8',
     )
 
-    # NEXT_EXECUTION_SEC=$(date --date "${NEXT_EXECUTION}" +'%s')'
+    next_execution = next_execution.stdout.split("=")[1].strip()
+
+    logger.debug("Convert next execution timestamp %s to seconds.", last_execution)
+    next_execution_sec = subprocess.run(
+        ["date", "--date", f"{next_execution}", "+%s"],
+        check = False,
+        capture_output = True,
+        encoding = 'utf-8',
+    )
+
+    next_execution_sec = int(next_execution_sec.stdout.strip())
 
     logger.debug("Calculate timestamps for time window %s.", time_window)
-    # MAX_LAST_EXECUTION_SEC=$(date --date "${TIMEFRAME} minutes ago" +'%s')
-    # MAX_NEXT_EXECUTION_SEC=$(date --date "${TIMEFRAME} minutes" +'%s')
+    max_last_execution_sec = subprocess.run(
+        ["date", "--date", f"{time_window} minutes ago", "+%s"],
+        check = False,
+        capture_output = True,
+        encoding = 'utf-8',
+    )
+
+    max_next_execution_sec = subprocess.run(
+        ["date", "--date", f"{time_window} minutes", "+%s"],
+        check = False,
+        capture_output = True,
+        encoding = 'utf-8',
+    )
 
     logger.debug("Compare timestamps.")
-    # if [[ ${LAST_EXECUTION_SEC} -lt ${MAX_LAST_EXECUTION_SEC} ]] && [[ ${NEXT_EXECUTION_SEC} -gt ${MAX_NEXT_EXECUTION_SEC} ]]; then
-    # echo "Warning: ${SYSTEMD_TIMER} will not run in specified timeframe "
-    # exit 1
+    if (last_execution_sec < int(max_last_execution_sec.stdout)) and (next_execution_sec > int(max_next_execution_sec.stdout)):
+        logger.debug("Timer %s will not run in specified timeframe.", timer)
+        return 1
 
     return 0
