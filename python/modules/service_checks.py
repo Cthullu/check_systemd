@@ -6,8 +6,8 @@ Checks to determine if a systemd service exists, runs and is enabled.
 
 __author__: str = "Daniel Kuß"
 
-import subprocess
 import logging
+import subprocess
 
 def check_service_exists(service: str, logger: logging = None) -> int:
     """
