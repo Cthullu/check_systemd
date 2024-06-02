@@ -26,5 +26,5 @@ MIT
 
 Daniel Kuß
 
-[1]: bash/readme.md
-[2]: python/readme.md
+[1]: bash/README.md
+[2]: python/README.md
