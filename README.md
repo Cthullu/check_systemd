@@ -1,7 +1,8 @@
 # Check Systemd
 
-![Service Workflow](https://github.com/cthullu/systemd_timer_check/actions/workflows/systemd_service.yml/badge.svg?branch=main)
-![Timer Workflow](https://github.com/cthullu/systemd_timer_check/actions/workflows/systemd_timer.yml/badge.svg?branch=main)
+[![Check Service Script](https://github.com/Cthullu/check_systemd/actions/workflows/systemd_service.yml/badge.svg?branch=main)](https://github.com/Cthullu/check_systemd/actions/workflows/systemd_service.yml)
+[![Check Timer Script](https://github.com/Cthullu/check_systemd/actions/workflows/systemd_timer.yml/badge.svg?branch=main)](https://github.com/Cthullu/check_systemd/actions/workflows/systemd_timer.yml)
+[![Perform Python Linter run](https://github.com/Cthullu/check_systemd/actions/workflows/python_lint.yml/badge.svg?branch=main)](https://github.com/Cthullu/check_systemd/actions/workflows/python_lint.yml)
 
 A toolsuite to check systemd services and timer.
 
