@@ -1,0 +1,37 @@
+---
+name: Perform Python Linter run
+
+on:
+  pull_request:
+    branches: ["main"]
+
+  push:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+jobs:
+  python_lint:
+    name: Python Lint Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Run Python Linter
+        uses: cclauss/Find-Python-syntax-errors-action@master
+        with:
+          python_version: "3.9"
+          flake8_version: "3.9.2"
+          pylint_version: "2.9.6"
+          mypy_version: "0.910"
+          black_version: "21.6b0"
+          isort_version: "5.9.3"
+          pipenv_version: "2021.5.29"
+          # poetry_version: "1.1.8"
+          # poetry_install: "true"
+          # poetry_build: "true"
+          # poetry_publish: "false"
+          # poetry_publish_repository: "pypi"
+          # poetry_publish_username: "username"
+          # poetry_publish_password: "password"
+          # poetry_publish_email: "
