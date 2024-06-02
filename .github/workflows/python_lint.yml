@@ -11,27 +11,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  python_lint:
-    name: Python Lint Check
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10"]
     steps:
       - uses: actions/checkout@master
 
-      - name: Run Python Linter
-        uses: cclauss/Find-Python-syntax-errors-action@master
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@master
         with:
-          python_version: "3.9"
-          flake8_version: "3.9.2"
-          pylint_version: "2.9.6"
-          mypy_version: "0.910"
-          black_version: "21.6b0"
-          isort_version: "5.9.3"
-          pipenv_version: "2021.5.29"
-          # poetry_version: "1.1.8"
-          # poetry_install: "true"
-          # poetry_build: "true"
-          # poetry_publish: "false"
-          # poetry_publish_repository: "pypi"
-          # poetry_publish_username: "username"
-          # poetry_publish_password: "password"
-          # poetry_publish_email: "
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+
+      - name: Analysing the code with pylint
+        run: |
+          pylint $(git ls-files '*.py')
