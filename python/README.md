@@ -1,4 +1,4 @@
-# check_systemd.py
+# Python version
 
 Python version of the check systemd tools.
 
@@ -69,3 +69,9 @@ It provides the following return codes:
 * `1`: if the specified timer is not active
 * `1`: if the specified timer did not run within defined timeframe
 * `2`: if the specified timer was not found
+
+## Author Information
+
+| Date        | Version | Author      |
+|-------------|---------|-------------|
+| 2024-06-02  | 1.0.0   | Daniel Kuß  |
