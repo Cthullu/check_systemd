@@ -5,8 +5,9 @@ Check systemd services and timers.
 """
 
 __author__: str = "Daniel Kuß"
-__version__: str = "0.1.0"
+__version__: str = "1.0.0"
 __src__: str = "https://github.com/Cthullu/check_systemd"
+__status__: str = "Production"
 
 import logging
 import sys
